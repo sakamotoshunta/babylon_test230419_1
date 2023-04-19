@@ -1,0 +1,19 @@
+{
+  "name": "babylon_test230419_1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ammo.js": "^0.0.10",
+    "babylonjs": "^5.57.1",
+    "babylonjs-loaders": "^5.57.1",
+    "vite": "^4.2.2"
+  }
+}
