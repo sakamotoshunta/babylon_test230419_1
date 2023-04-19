@@ -15,7 +15,7 @@ async function main() {
     scene.debugLayer.show({
       physicsEngine: true,
     });
-    scene.clearColor = new BABYLON.Color4(1, 0, 0.3, 1);
+    scene.clearColor = new BABYLON.Color3.FromHexString("#ff2f00"); //背景色をHEXで指定。
 
     // カメラを作成
     const camera = new BABYLON.ArcRotateCamera(
@@ -23,11 +23,12 @@ async function main() {
       -Math.PI / 2,
       Math.PI / 2.5,
       3,
-      new BABYLON.Vector3(0, 0, -2),
+      new BABYLON.Vector3(0, 0, 0),
       scene
     );
     // カメラがユーザからの入力で動くように
     camera.attachControl(canvas, true);
+    camera.setPosition(new BABYLON.Vector3(0, 0, -10));
 
     // ライトを作成
     const light = new BABYLON.HemisphericLight(
@@ -72,6 +73,15 @@ async function main() {
       scene
     );
 
+    var dragBehavior = new BABYLON.PointerDragBehavior({
+      dragAxis: new BABYLON.Vector3(1, 0, 0),
+    });
+    box.addBehavior(dragBehavior);
+
+    dragBehavior.onDragObservable.add(function (eventData) {
+      box.position.addInPlace(eventData.delta);
+    });
+
     return scene;
   }
 
@@ -88,3 +98,6 @@ async function main() {
 
 //DOMがロードされたらmain()を呼び出す。
 window.addEventListener("DOMContentLoaded", main);
+
+//クリックでmain関数が呼ばれるようにする。Tonejsを使う場合
+// window.addEventListener("click", main);
