@@ -1,20 +1,20 @@
 // main.js
 import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
-// import * as Ammo from "ammo.js";
-// async function loadAmmo() {
-//   return await import("ammo.js");
-// }
+import * as GUI from "babylonjs-gui";
+
+//ammo.jsはindex.htmlの<script>内でインポート
 
 async function main() {
   const canvas = document.getElementById("renderCanvas");
   const engine = new BABYLON.Engine(canvas);
+  var text1;
 
   async function createScene() {
     const scene = new BABYLON.Scene(engine);
-    scene.debugLayer.show({
-      physicsEngine: true,
-    });
+    // scene.debugLayer.show({
+    //   physicsEngine: true,
+    // });
     scene.clearColor = new BABYLON.Color3.FromHexString("#ff2f00"); //背景色をHEXで指定。
 
     // カメラを作成
@@ -36,6 +36,33 @@ async function main() {
       new BABYLON.Vector3(0, 1, 0),
       scene
     );
+
+    //GUIの表示 //サイズの指定などは別途関数でまとめる。
+    let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI(
+      "GUI",
+      true,
+      scene
+    );
+    var button1 = GUI.Button.CreateSimpleButton("but1", "Click Me");
+    button1.width = "150px";
+    button1.height = "40px";
+    button1.color = "white";
+    button1.cornerRadius = 20;
+    button1.background = "green";
+    button1.onPointerUpObservable.add(function () {
+      alert("you did it!");
+    });
+    advancedTexture.addControl(button1);
+    text1 = new GUI.TextBlock();
+    text1.transformCenterX = 0;
+    text1.transformCenterY = 0;
+    text1.text = "MENU";
+    text1.color = "white";
+    text1.fontSize = (window.innerWidth / 1920) * 150;
+    text1.fontFamily = "OstentRounded-Regular";
+    text1.top = (-1 * window.innerHeight) / 2;
+    text1.left = (-1 * window.innerHeight) / 2;
+    advancedTexture.addControl(text1);
 
     // 箱 (豆腐) を作成
     const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
@@ -82,12 +109,17 @@ async function main() {
       box.position.addInPlace(eventData.delta);
     });
 
+    engine.resize();
     return scene;
   }
 
   const scene = await createScene();
 
   engine.runRenderLoop(() => {
+    text1.top = ((-1 * window.innerHeight) / 2) * 0.9;
+    text1.left = ((-1 * window.innerHeight) / 2) * 0.9;
+    text1.fontSize = (window.innerWidth / 1920) * 150;
+
     scene.render();
   });
 
